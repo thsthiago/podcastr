@@ -8,6 +8,7 @@ import { convertDurationToTimeString } from '../utils/convertDurationToTimeStrin
 import styles from '../styles/home.module.scss'
 import { useContext } from 'react'
 import { PlayerContext } from '../context/PlayerContext'
+import Head from 'next/head'
 
 interface Episode {
   id: string
@@ -26,10 +27,16 @@ interface HomeProps {
 }
 
 export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
-  const { play } = useContext(PlayerContext)
+  const { playList } = useContext(PlayerContext)
+
+  const episodeList = [...latestEpisodes, ...allEpisodes]
 
   return (
     <div className={styles.homepage}>
+      <Head>
+        <title>Home | Podcastr</title>
+      </Head>
+
       <section className={styles.latestEpisodes}>
         <h2>Últimos lançamentos</h2>
         <ul>
@@ -51,15 +58,7 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
 
               <button
                 type="button"
-                onClick={() =>
-                  play({
-                    duration: episode.duration,
-                    members: episode.members,
-                    thumbinail: episode.thumbnail,
-                    title: episode.title,
-                    url: episode.url
-                  })
-                }>
+                onClick={() => playList(episodeList, index)}>
                 <img src="/play-green.svg" alt="Tocar episódio" />
               </button>
             </li>
@@ -81,7 +80,7 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
             </tr>
           </thead>
           <tbody>
-            {allEpisodes.map((episode) => (
+            {allEpisodes.map((episode, index) => (
               <tr key={episode.id}>
                 <td style={{ width: 72 }}>
                   <Image
@@ -104,13 +103,7 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                   <button
                     type="button"
                     onClick={() =>
-                      play({
-                        duration: episode.duration,
-                        members: episode.members,
-                        thumbinail: episode.thumbnail,
-                        title: episode.title,
-                        url: episode.url
-                      })
+                      playList(episodeList, index + latestEpisodes.length)
                     }>
                     <img src="/play-green.svg" alt="Tocar episódio" />
                   </button>
