@@ -24,10 +24,6 @@ interface EpisodeProps {
 }
 
 export default function Episode({ episode }: EpisodeProps) {
-  if (!episode) {
-    return <h1>Carregando...</h1>
-  }
-
   return (
     <div className={styles.episode}>
       <div className={styles.thumbnailContainer}>
